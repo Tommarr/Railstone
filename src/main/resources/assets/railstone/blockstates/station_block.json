@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "railstone:block/station_block"}
+  }
+}
