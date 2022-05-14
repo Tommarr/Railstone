@@ -3,10 +3,6 @@
 
   "itemGroup.railstone.railstone": "Railstone",
 
-  "block.railstone.box": "Box",
-  "item.railstone.bag": "Bag",
-  "item.railstone.positioned_bag": "Positioned Bag",
-
   "railstone.station_block_place": "Station placed sound",
 
   "tooltip.railstone.station_block": "Place the station in front of a rail"
