@@ -1,5 +1,8 @@
 {
   "variants": {
-    "": { "model": "railstone:block/station_block"}
+    "facing=north": { "model": "railstone:block/station_block" },
+    "facing=east": { "model": "railstone:block/station_block", "y": 90 },
+    "facing=south": { "model": "railstone:block/station_block", "y": 180 },
+    "facing=west": { "model": "railstone:block/station_block", "y": 270 }
   }
 }

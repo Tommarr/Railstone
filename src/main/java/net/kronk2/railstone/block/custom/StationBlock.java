@@ -2,40 +2,153 @@ package net.kronk2.railstone.block.custom;
 
 import net.kronk2.railstone.Railstone;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
-public class StationBlock extends BlockWithEntity {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(Railstone.MOD_ID);
+public class StationBlock extends Block {
+    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     public StationBlock(Settings settings) {
         super(settings);
+    }
+
+    private static final VoxelShape SHAPE_N = Stream.of(
+            Block.createCuboidShape(0, 0, 0, 5, 3, 16),
+            Block.createCuboidShape(11, 0, 0, 16, 3, 16),
+            Block.createCuboidShape(1, 3, 12, 4, 9, 15),
+            Block.createCuboidShape(12, 3, 12, 15, 9, 15),
+            Block.createCuboidShape(1, 3, 1, 4, 11, 4),
+            Block.createCuboidShape(12, 3, 1, 15, 11, 4),
+            Block.createCuboidShape(-1, 11, 0, 17, 16, 4),
+            Block.createCuboidShape(1, 12, -1, 4, 15, 0),
+            Block.createCuboidShape(12, 12, -1, 15, 15, 0),
+            Block.createCuboidShape(1, 7, 8, 4, 10, 14),
+            Block.createCuboidShape(1, 8, 5, 4, 11, 11),
+            Block.createCuboidShape(1, 9, 3, 4, 12, 8),
+            Block.createCuboidShape(12, 8, 5, 15, 11, 11),
+            Block.createCuboidShape(12, 7, 8, 15, 10, 14),
+            Block.createCuboidShape(12, 9, 3, 15, 12, 8)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_E = Stream.of(
+            Block.createCuboidShape(0, 0, 0, 16, 3, 5),
+            Block.createCuboidShape(0, 0, 11, 16, 3, 16),
+            Block.createCuboidShape(1, 3, 1, 4, 9, 4),
+            Block.createCuboidShape(1, 3, 12, 4, 9, 15),
+            Block.createCuboidShape(12, 3, 1, 15, 11, 4),
+            Block.createCuboidShape(12, 3, 12, 15, 11, 15),
+            Block.createCuboidShape(12, 11, -1, 16, 16, 17),
+            Block.createCuboidShape(16, 12, 1, 17, 15, 4),
+            Block.createCuboidShape(16, 12, 12, 17, 15, 15),
+            Block.createCuboidShape(2, 7, 1, 8, 10, 4),
+            Block.createCuboidShape(5, 8, 1, 11, 11, 4),
+            Block.createCuboidShape(8, 9, 1, 13, 12, 4),
+            Block.createCuboidShape(5, 8, 12, 11, 11, 15),
+            Block.createCuboidShape(2, 7, 12, 8, 10, 15),
+            Block.createCuboidShape(8, 9, 12, 13, 12, 15)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_S = Stream.of(
+            Block.createCuboidShape(11, 0, 0, 16, 3, 16),
+            Block.createCuboidShape(0, 0, 0, 5, 3, 16),
+            Block.createCuboidShape(12, 3, 1, 15, 9, 4),
+            Block.createCuboidShape(1, 3, 1, 4, 9, 4),
+            Block.createCuboidShape(12, 3, 12, 15, 11, 15),
+            Block.createCuboidShape(1, 3, 12, 4, 11, 15),
+            Block.createCuboidShape(-1, 11, 12, 17, 16, 16),
+            Block.createCuboidShape(12, 12, 16, 15, 15, 17),
+            Block.createCuboidShape(1, 12, 16, 4, 15, 17),
+            Block.createCuboidShape(12, 7, 2, 15, 10, 8),
+            Block.createCuboidShape(12, 8, 5, 15, 11, 11),
+            Block.createCuboidShape(12, 9, 8, 15, 12, 13),
+            Block.createCuboidShape(1, 8, 5, 4, 11, 11),
+            Block.createCuboidShape(1, 7, 2, 4, 10, 8),
+            Block.createCuboidShape(1, 9, 8, 4, 12, 13)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_W = Stream.of(
+            Block.createCuboidShape(0, 0, 11, 16, 3, 16),
+            Block.createCuboidShape(0, 0, 0, 16, 3, 5),
+            Block.createCuboidShape(12, 3, 12, 15, 9, 15),
+            Block.createCuboidShape(12, 3, 1, 15, 9, 4),
+            Block.createCuboidShape(1, 3, 12, 4, 11, 15),
+            Block.createCuboidShape(1, 3, 1, 4, 11, 4),
+            Block.createCuboidShape(0, 11, -1, 4, 16, 17),
+            Block.createCuboidShape(-1, 12, 12, 0, 15, 15),
+            Block.createCuboidShape(-1, 12, 1, 0, 15, 4),
+            Block.createCuboidShape(8, 7, 12, 14, 10, 15),
+            Block.createCuboidShape(5, 8, 12, 11, 11, 15),
+            Block.createCuboidShape(3, 9, 12, 8, 12, 15),
+            Block.createCuboidShape(5, 8, 1, 11, 11, 4),
+            Block.createCuboidShape(8, 7, 1, 14, 10, 4),
+            Block.createCuboidShape(3, 9, 1, 8, 12, 4)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        switch (state.get(FACING))
+        {
+            case NORTH:
+                return SHAPE_N;
+            case EAST:
+                return SHAPE_E;
+            case SOUTH:
+                return SHAPE_S;
+            case WEST:
+                return SHAPE_W;
+            default:
+                return SHAPE_N;
+        }
+    }
+
+    @Nullable
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return this.getDefaultState().with(FACING, ctx.getPlayerFacing().getOpposite());
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, BlockRotation rotation) {
+        return state.with(FACING, rotation.rotate(state.get(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, BlockMirror mirror) {
+        return state.rotate(mirror.getRotation(state.get(FACING)));
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
     }
 
     @Override
@@ -111,34 +224,6 @@ public class StationBlock extends BlockWithEntity {
         return ActionResult.SUCCESS;
     }
 
-    @Override
-    public BlockEntity createBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new StationBlockEntity(blockPos, blockState);
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.getBlock() != newState.getBlock()) {
-            BlockEntity be = world.getBlockEntity(pos);
-
-            if (be instanceof Inventory) {
-                ItemScatterer.spawn(world, pos, (Inventory) be);
-                world.updateComparators(pos, this);
-            }
-
-            super.onStateReplaced(state, world, pos, newState, moved);
-        }
-    }
-
-    @Override
-    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
-        return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
-    }
 
     public void playParticle(World world, BlockPos pos, DefaultParticleType particle){
         for (int i = 0; i < 360; i++)
