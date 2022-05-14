@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "RailStone",
-  "description": "Make use of those rails! Now you can teleport from a station to the end of your track",
+  "description": "Make use of those rails! Now you can teleport from a station to the end of your track.",
   "authors": [
     "kronk2"
   ],
@@ -14,7 +14,7 @@
   },
 
   "license": "MIT",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/railstone/icon.png",
 
   "environment": "*",
   "entrypoints": {

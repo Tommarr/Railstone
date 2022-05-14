@@ -115,19 +115,13 @@ public class StationBlock extends Block {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        switch (state.get(FACING))
-        {
-            case NORTH:
-                return SHAPE_N;
-            case EAST:
-                return SHAPE_E;
-            case SOUTH:
-                return SHAPE_S;
-            case WEST:
-                return SHAPE_W;
-            default:
-                return SHAPE_N;
-        }
+        return switch (state.get(FACING)) {
+            case NORTH -> SHAPE_N;
+            case EAST -> SHAPE_E;
+            case SOUTH -> SHAPE_S;
+            case WEST -> SHAPE_W;
+            default -> SHAPE_N;
+        };
     }
 
     @Nullable
