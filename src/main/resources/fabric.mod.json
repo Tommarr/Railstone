@@ -9,8 +9,8 @@
     "kronk2"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/railstone",
+    "sources": "https://github.com/Tommarr/Railstone"
   },
 
   "license": "MIT",
