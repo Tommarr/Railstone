@@ -9,6 +9,7 @@ import net.kronk2.railstone.block.custom.StationBlock;
 import net.kronk2.railstone.block.custom.StationBlockEntity;
 import net.kronk2.railstone.item.ModItemGroup;
 import net.kronk2.railstone.screen.StationScreenHandler;
+import net.kronk2.railstone.sound.ModSounds;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
@@ -25,7 +26,8 @@ import static net.kronk2.railstone.Railstone.MOD_ID;
 public class ModBlocks {
 
     public static final Block STATION_BLOCK = registerBlock("station_block",
-            new StationBlock(FabricBlockSettings.of(Material.WOOD).strength(4f).requiresTool()), ModItemGroup.RAILSTONE);
+            new StationBlock(FabricBlockSettings.of(Material.WOOD)
+                    .strength(4f).requiresTool().sounds((ModSounds.STATION_SOUNDS))), ModItemGroup.RAILSTONE);
 
     public static final ScreenHandlerType<StationScreenHandler> STATION_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(new Identifier(MOD_ID, "station"), StationScreenHandler::new);
 

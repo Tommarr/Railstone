@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.kronk2.railstone.block.ModBlocks;
+import net.kronk2.railstone.particle.ModParticles;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -31,5 +32,6 @@ public class Railstone implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Initializing Railstone");
 		ModBlocks.registerModBlocks();
+		ModParticles.registerParticles();
 	}
 }

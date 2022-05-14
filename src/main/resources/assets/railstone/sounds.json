@@ -1,0 +1,32 @@
+{
+  "station_block_place": {
+    "subtitle": "railstone.station_block_place",
+    "sounds": [
+      "railstone:station_block_place"
+    ]
+  },
+  "station_block_break": {
+    "subtitle": "railstone.station_block_break",
+    "sounds": [
+      "railstone:station_block_break"
+    ]
+  },
+  "station_block_step": {
+    "subtitle": "railstone.station_block_step",
+    "sounds": [
+      "railstone:station_block_step"
+    ]
+  },
+  "station_block_hit": {
+    "subtitle": "railstone.station_block_hit",
+    "sounds": [
+      "railstone:station_block_hit"
+    ]
+  },
+  "station_block_fall": {
+    "subtitle": "railstone.station_block_fall",
+    "sounds": [
+      "railstone:station_block_fall"
+    ]
+  }
+}

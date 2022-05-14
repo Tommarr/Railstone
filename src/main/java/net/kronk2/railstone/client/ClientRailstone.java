@@ -16,14 +16,18 @@
 
 package net.kronk2.railstone.client;
 
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.kronk2.railstone.block.ModBlocks;
 
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.api.ClientModInitializer;
+import net.kronk2.railstone.particle.ModParticles;
+import net.kronk2.railstone.particle.custom.StationParticle;
 
 public class ClientRailstone implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ScreenRegistry.register(ModBlocks.STATION_SCREEN_HANDLER, PositionedScreen::new);
+		ParticleFactoryRegistry.getInstance().register(ModParticles.STATION_PARTICLE, StationParticle.Factory::new);
 	}
 }
