@@ -1,6 +1,7 @@
 package net.kronk2.railstone.block.custom;
 
 import net.kronk2.railstone.Railstone;
+import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -170,7 +171,6 @@ public class StationBlock extends Block {
         // 2 Times on server (for each hand)
         // 2 Times on client (for each hand)
 
-
 //        LOGGER.info(destinationBlockPos.toString());
         if(world.isClient())
         {
@@ -185,16 +185,6 @@ public class StationBlock extends Block {
                 else{
                     playParticle(world, pos, ParticleTypes.SMOKE);
                 }
-//                player.playSound(SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.BLOCKS, 1f, 1f);
-//                player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 1f, 1f);
-//                player.sendMessage(new LiteralText("Stations in world:"), false);
-//                int index = 0;
-//                for (StationModel s: stations.getPlacedStations()) {
-//                    index++;
-//                    player.sendMessage(new LiteralText(index + " " + s.getPos().toString()), false);
-//                    LOGGER.info(s.toString());
-//                }
-
             }
             else{
                 // CLIENT: OFF HAND
@@ -257,6 +247,7 @@ public class StationBlock extends Block {
     }
 
     public BlockPos checkNeighborBlocks(BlockPos pos, BlockPos previousPos, World world){
+
         BlockPos[] neighborBlocks = {
                 new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()),
                 new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()),
@@ -277,7 +268,9 @@ public class StationBlock extends Block {
         {
             for (BlockPos neighborBlock: neighborBlocks) {
                 Block block = world.getBlockState(new BlockPos(neighborBlock)).getBlock();
-                if(Objects.equals(block.getLootTableId().toString(), "minecraft:blocks/rail")){
+
+                if(AbstractRailBlock.isRail(block.getDefaultState())){
+
                     if(neighborBlock.getX() == previousPos.getX()){
                         if(neighborBlock.getZ() != previousPos.getZ()){
                             return neighborBlock;
@@ -297,7 +290,7 @@ public class StationBlock extends Block {
         else{
             for (BlockPos neighborBlock: neighborBlocks) {
                 Block block = world.getBlockState(new BlockPos(neighborBlock)).getBlock();
-                if(Objects.equals(block.getLootTableId().toString(), "minecraft:blocks/rail"))
+                if(AbstractRailBlock.isRail(block.getDefaultState()))
                     return neighborBlock;
             }
         }
